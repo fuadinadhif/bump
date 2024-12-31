@@ -1,7 +1,7 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -9,6 +9,14 @@ import { ContentfulPost } from "@/types/contentful";
 import { getEntries } from "@/utils/get-contentful-data";
 
 export default function SearchPage() {
+  return (
+    <Suspense fallback="<p>Loading...</p>">
+      <SearchComponent />
+    </Suspense>
+  );
+}
+
+function SearchComponent() {
   const [results, setResults] = useState<ContentfulPost[] | null>([]);
   const [isLoading, setIsLoading] = useState(true);
   const searchParams = useSearchParams();
