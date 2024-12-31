@@ -11,9 +11,9 @@ interface GetEntriesParams {
 }
 
 const client = contentful.createClient({
-  space: process.env.NEXT_PUBLIC_CONTENTFUL_SPACE_ID as string,
+  space: "qqx0zvtrc2ma",
   environment: "master",
-  accessToken: process.env.NEXT_PUBLIC_CONTENTFUL_ACCESS_TOKEN as string,
+  accessToken: "sB0F-guB28wVDj0r6uv2k0PnqXhvjpWfDF0iEq_JMSo",
 });
 
 export async function getEntries<T>({
