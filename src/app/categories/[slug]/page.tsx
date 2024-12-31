@@ -1,0 +1,82 @@
+import Link from "next/link";
+import Image from "next/image";
+
+import { ContentfulPost } from "@/types/contentful";
+import { getEntries } from "@/utils/get-contentful-data";
+import BreadCrumb from "@/components/bread-crumb";
+
+export default async function CategoriesSlugPage({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const slug = (await params).slug;
+  const posts = await getEntries<ContentfulPost>({
+    content_type: "bumpBlogPost",
+  });
+  const filteredPostsByCategory = posts?.filter((post) =>
+    post.categories.some((category) => category.fields.slug === slug),
+  );
+
+  return (
+    <section className="mx-auto mt-[100px] min-h-[calc(100vh-185px)] max-w-[1100px] p-5">
+      <BreadCrumb rootPath="categories" slug={slug} />
+
+      <h2 className="font-lighter mb-10 text-2xl sm:text-4xl">
+        <span className="font-bold">{slug.toUpperCase()}</span> CATEGORY
+      </h2>
+      {!filteredPostsByCategory ? (
+        <p>Loading...</p>
+      ) : filteredPostsByCategory.length > 0 ? (
+        <div className="grid grid-cols-1 gap-14 md:grid-cols-2">
+          {filteredPostsByCategory.map((post) => (
+            <article
+              key={post.slug}
+              className="grid grid-cols-1 grid-rows-[300px_1fr] gap-7 sm:h-full sm:grid-cols-[1fr_250px] sm:grid-rows-1"
+            >
+              <Link href={`/blog/${post.slug}`} className="flex gap-2">
+                <div className="relative hidden h-full w-12 overflow-hidden rounded-3xl lg:block">
+                  <Image
+                    src={`https:${post.image.fields.file.url}`}
+                    alt="Featured image"
+                    fill
+                    className="bg-black object-cover object-left"
+                  />
+                </div>
+                <div className="relative h-full w-full overflow-hidden rounded-3xl">
+                  <Image
+                    src={`https:${post.image.fields.file.url}`}
+                    alt="Featured image"
+                    fill
+                    className="bg-black object-cover lg:object-[-2.5rem_0]"
+                  />
+                </div>
+              </Link>
+              <div>
+                <Link
+                  href={`/blog/${post.slug}`}
+                  className="mb-4 block text-2xl font-bold"
+                >
+                  {post.title}
+                </Link>
+                <p className="mb-3">{post.excerpt}</p>
+                <div className="flex flex-wrap gap-2">
+                  {post.categories.map((category, index) => (
+                    <span
+                      key={index}
+                      className="rounded-full bg-secondary-grey px-4 py-2 text-sm"
+                    >
+                      {category.fields.name}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
+      ) : (
+        <p>No results were found</p>
+      )}
+    </section>
+  );
+}

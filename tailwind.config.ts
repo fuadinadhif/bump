@@ -8,9 +8,16 @@ export default {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        raleway: ["Raleway", "sans-serif"],
+        poppins: ["Poppins", "sans-serif"],
+      },
       colors: {
-        background: "var(--background)",
-        foreground: "var(--foreground)",
+        "primary-black": "#1A093E",
+        "primary-grey": "#787282",
+        "secondary-grey": "#efeef5",
+        "primary-blue": "#5b5daa",
+        "secondary-blue": "#cdcdf1",
       },
     },
   },
